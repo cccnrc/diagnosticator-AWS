@@ -1,0 +1,11 @@
+Dear {{ user.username }},
+
+To confirm your mail click on the following link:
+
+{{ url_for('auth.confirm_email', token=token, _external=True) }}
+
+If you have not requested an account simply ignore this message.
+
+Sincerely,
+
+The Diagnosticator Team

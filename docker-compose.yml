@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  docker-mysql:
+    image: mysql:latest
+    container_name: docker-mysql
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=diagnosticator
+      - MYSQL_USER=diagnosticator
+      - MYSQL_PASSWORD=diagnosticator
+    ports:
+      - '3307:3306'
+    expose:
+      - '3307'
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+    volumes:
+      - mysqlDB:/var/lib/mysql
+  docker-diagnosticator:
+    build: .
+    container_name: docker-diagnosticator
+    links:
+      - docker-mysql
+    environment:
+      - DATABASE_URL=mysql+pymysql://diagnosticator:diagnosticator@docker-mysql:3306/diagnosticator
+      - MAIL_SERVER="smtp.sendgrid.net"
+      - MAIL_PORT=587
+      - MAIL_USE_TLS=1
+      - MAIL_USE_SSL=0
+      - MAIL_USERNAME="apikey"
+      - MAIL_PASSWORD="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"
+      - MAIL_DEFAULT_SENDER="admin@diagnosticator.edu"
+      - TOKEN_RESTORE_EXP_SEC=3600
+      - TOKEN_EXP_SEC=3600
+    ports:
+      - "5000:5000"
+    expose:
+      - '5000'
+
+volumes:
+  mysqlDB:
