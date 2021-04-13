@@ -36,6 +36,7 @@ CREATE DATABASE diagnosticator;
 
 ### deploy the app
 cd $APP_DIR
+git clone https://github.com/cccnrc/diagnosticator-AWS
 python3.8 -m venv venv
 echo 'export MAIL_SERVER=
 export MAIL_PORT=
