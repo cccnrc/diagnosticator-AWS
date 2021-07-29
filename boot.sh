@@ -1,6 +1,7 @@
 #!/bin/sh
 # this script is used to boot a Docker container
 source venv/bin/activate
+sleep 30
 while true; do
     flask db init
     flask db migrate

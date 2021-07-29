@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  docker-server-mysql:
+    image: mysql/mysql-server:latest
+    container_name: docker-server-mysql
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=diagnosticator
+      - MYSQL_USER=diagnosticator
+      - MYSQL_PASSWORD=diagnosticator
+    ports:
+      - '3307:3306'
+    expose:
+      - '3307'
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+    volumes:
+      - mysqlDB:/var/lib/mysql
+  docker-server-diagnosticator:
+    build: .
+    container_name: docker-server-diagnosticator
+    links:
+      - docker-server-mysql
+    environment:
+      - DATABASE_URL=mysql+pymysql://diagnosticator:diagnosticator@docker-server-mysql:3306/diagnosticator
+      - MAIL_SERVER="smtp.gmail.com"
+      - MAIL_PORT=587
+      - MAIL_USE_TLS=1
+      - MAIL_USERNAME=###
+      - MAIL_PASSWORD=###
+      - MAIL_DEFAULT_SENDER=###
+      - TOKEN_RESTORE_EXP_SEC=3600
+      - TOKEN_EXP_SEC=3600
+    ports:
+      - "7000:5000"
+
+volumes:
+  mysqlDB:
