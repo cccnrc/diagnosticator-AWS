@@ -1,2 +1,5 @@
 docker-compose.yml
 README-HEROKU.md
+venv
+migrations
+__pycache__
