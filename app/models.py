@@ -81,7 +81,7 @@ class User(UserMixin, db.Model):
         return jwt.encode(
             {'activate': self.id, 'exp': time() + expires_in},
             current_app.config['SECRET_KEY'],
-            algorithm='HS256').decode('utf-8')
+            algorithm='HS256')
 
     @staticmethod
     def verify_jwt_token(token):
