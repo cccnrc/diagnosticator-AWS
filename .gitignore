@@ -3,3 +3,4 @@ README-HEROKU.md
 venv
 migrations
 __pycache__
+requirements-new.txt
