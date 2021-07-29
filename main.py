@@ -2,7 +2,6 @@ from app import create_app, db
 from app.models import User
 
 app = create_app()
-db.create_all()
 
 @app.shell_context_processor
 def make_shell_context():
