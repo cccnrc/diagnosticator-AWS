@@ -61,5 +61,3 @@ def create_app(config_class=Config):
             app.logger.addHandler(mail_handler)
 
     return app
-
-from app import models
