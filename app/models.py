@@ -36,7 +36,7 @@ class User(UserMixin, db.Model):
     confirmed_on = db.Column(db.DateTime, nullable=True)
     variantHG19_users = db.relationship('VariantHG19User', backref='user', foreign_keys='VariantHG19User.user_id', lazy='dynamic')
     variantHG38_users = db.relationship('VariantHG38User', backref='user', foreign_keys='VariantHG38User.user_id', lazy='dynamic')
-    key = db.Column(db.String(100), unique=True)
+    key = db.Column(db.String(120), unique=True)
     last_key_request = db.Column(db.DateTime)
     last_knownHG19_request = db.Column(db.DateTime)
     last_knownHG19_request_project_name = db.Column(db.String(120))
