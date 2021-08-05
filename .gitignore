@@ -4,3 +4,4 @@ venv
 migrations
 __pycache__
 requirements-new.txt
+app.db

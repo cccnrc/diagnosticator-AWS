@@ -9,13 +9,13 @@ class Config(object):
     ### DATABASE_URL
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '').replace('postgres://', 'postgresql://') or 'sqlite:///' + os.path.join(basedir, 'app.db')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '').replace('postgres://', 'postgresql://') or 'sqlite:///' + os.path.join(basedir, 'DB', 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ADMINS = ['cocchi.e89@gmail.com']
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = int(os.environ.get('MAIL_PORT') or 25)
-    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
-    MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL') is not None
+    MAIL_USE_TLS = bool( int( os.environ.get('MAIL_USE_TLS') ) )
+    MAIL_USE_SSL = bool( int( os.environ.get('MAIL_USE_SSL') ) )
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     BASEDIR = os.path.abspath(os.path.dirname(__file__))

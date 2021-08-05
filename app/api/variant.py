@@ -41,7 +41,7 @@ def get_variant():
 
 from flask import current_app
 from app.decorators import check_variant_SQL_DB
-from app.models import VariantHG19, VariantHG19User, VariantHG38, VariantHG38User
+from app.models import VariantHG19User, VariantHG38User
 
 @bp.route('/post_variants', methods=['POST'])
 @token_auth.login_required
@@ -58,6 +58,75 @@ def post_variants():
     else:
         dictToReturn = {}
     return(jsonify(dictToReturn))
+
+
+
+
+
+@bp.route('/report_variant', methods=['POST'])
+@token_auth.login_required
+def report_variant():
+    '''
+        this is to store vairants received from users (ACCEPTED)
+    '''
+    input_json = request.get_json( force=True )
+    username = token_auth.current_user().username
+    user = User.query.filter_by( username = username ).first()
+    dictToReturn = ({ 'var_added' : 'NONE' })
+    if 'var_accepted' in input_json and 'var_accepted_ACMG' in input_json and 'assembly' in input_json:
+        ### if reported from same user with same ACMG overall classification just add +1 to that report
+        if input_json['assembly'] == 'hg19':
+            try:
+                variant = VariantHG19User.query.filter_by(
+                                                        user_id = user.id,
+                                                        variant_id = input_json['var_accepted'],
+                                                        reported_criteria = input_json['var_accepted_ACMG'],
+                                                    ).first()
+                variant.last_seen = datetime.utcnow()
+                variant.reported_num += 1
+                db.session.commit()
+                dictToReturn = ({ 'var_added' : input_json['var_accepted'], 'report_num': variant.reported_num })
+            except:
+                variant = VariantHG19User(
+                    user_id = user.id,
+                    variant_id = input_json['var_accepted'],
+                    reported_criteria = input_json['var_accepted_ACMG'],
+                    reported_subcriteria = input_json['var_accepted_ACMG_criterias'],
+                    reported_status = input_json['var_accepted_status'],
+                    project_name = input_json['project_name'],
+                    reported_YN = True
+                )
+                db.session.add( variant )
+                db.session.commit()
+                dictToReturn = ({ 'var_added' : input_json['var_accepted'], 'report_num': 1 })
+        elif input_json['assembly'] == 'hg38':
+            try:
+                variant = VariantHG38User.query.filter_by(
+                                                        user_id = user.id,
+                                                        variant_id = input_json['var_accepted'],
+                                                        reported_criteria = input_json['var_accepted_ACMG'],
+                                                    ).first()
+                variant.last_seen = datetime.utcnow()
+                variant.reported_num += 1
+                db.session.commit()
+                dictToReturn = ({ 'var_added' : input_json['var_accepted'], 'report_num': variant.reported_num })
+            except:
+                variant = VariantHG38User(
+                    user_id = user.id,
+                    variant_id = input_json['var_accepted'],
+                    reported_criteria = input_json['var_accepted_ACMG'],
+                    reported_subcriteria = input_json['var_accepted_ACMG_criterias'],
+                    reported_status = input_json['var_accepted_status'],
+                    project_name = input_json['project_name'],
+                    reported_YN = True
+                )
+                db.session.add( variant )
+                db.session.commit()
+                dictToReturn = ({ 'var_added' : input_json['var_accepted'], 'report_num': 1 })
+    return(jsonify(dictToReturn))
+
+
+
 
 
 
@@ -183,7 +252,7 @@ def update_variant_user_SQL( username, variant_list, assembly, project_name ):
 @token_auth.login_required
 def get_known_variants():
     '''
-        this teturns the DICT with all known P/LP variants
+        this teturns the DICT with all known P/LP variants in the specified assembly
     '''
     input_json = request.get_json( force = True )
     username = token_auth.current_user().username
@@ -191,16 +260,61 @@ def get_known_variants():
         if input_json['assembly'] == 'hg19':
             token_auth.current_user().last_knownHG19_request = datetime.utcnow()
             token_auth.current_user().last_knownHG19_request_project_name = input_json['project_name']
-            known_dict = get_known_variants_dict()['hg19']
+            known_dict = get_known_variants_dict_v1()['hg19']
         elif input_json['assembly'] == 'hg38':
             token_auth.current_user().last_knownHG38_request = datetime.utcnow()
             token_auth.current_user().last_knownHG38_request_project_name = input_json['project_name']
-            known_dict = get_known_variants_dict()['hg38']
+            known_dict = get_known_variants_dict_v1()['hg38']
         db.session.commit()
         dictToReturn = ({ 'known_dict' : known_dict })
     else:
         dictToReturn = {}
     return(jsonify(dictToReturn))
+
+
+@bp.route('/get_all_known_variants', methods=['POST'])
+@token_auth.login_required
+def get_all_known_variants():
+    '''
+        this teturns the DICT with ALL known P/LP variants
+    '''
+    input_json = request.get_json( force = True )
+    username = token_auth.current_user().username
+    known_dict = get_known_variants_dict_v1( username )
+    token_auth.current_user().last_knownHG19_request = datetime.utcnow()
+    token_auth.current_user().last_knownHG38_request = datetime.utcnow()
+    dictToReturn = ({ 'known_dict' : known_dict })
+    return(jsonify(dictToReturn))
+
+
+
+def get_known_variants_dict_v1( USERNAME ) :
+    '''
+        this extract the known_dict from SQL DB
+    '''
+    d = ({ 'hg19' : {}, 'hg38' : {} })
+    user = User.query.filter_by( username = USERNAME ).first()
+    userID = user.id
+    var19_id_list = VariantHG19User.query.filter( VariantHG19User.reported_YN == True).filter( VariantHG19User.user_id != userID ).all()
+    for v in var19_id_list:
+        if v.variant_id in d['hg19']:
+            if v.reported_criteria in d['hg19'][v.variant_id]:
+                d['hg19'][v.variant_id][v.reported_criteria] += v.reported_num
+            else:
+                d['hg19'][v.variant_id].update({ v.reported_criteria : v.reported_num })
+        else:
+            d['hg19'].update({ v.variant_id : { v.reported_criteria : v.reported_num } })
+    var38_id_list = VariantHG38User.query.filter( VariantHG38User.reported_YN == True).filter( VariantHG38User.user_id != userID ).all()
+    for v in var38_id_list:
+        if v.variant_id in d['hg38']:
+            if v.reported_criteria in d['hg38'][v.variant_id]:
+                d['hg38'][v.variant_id][v.reported_criteria] += v.reported_num
+            else:
+                d['hg38'][v.variant_id].update({ v.reported_criteria : v.reported_num })
+        else:
+            d['hg38'].update({ v.variant_id : { v.reported_criteria : v.reported_num } })
+    return(d)
+
 
 
 def get_known_variants_dict() :
