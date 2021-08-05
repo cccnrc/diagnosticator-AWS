@@ -1,5 +1,7 @@
 docker-compose.yml
 README-HEROKU.md
+README-LOCAL.md
+API_INTERACTER.py
 venv
 migrations
 __pycache__
