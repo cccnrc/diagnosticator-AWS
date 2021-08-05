@@ -260,11 +260,11 @@ def get_known_variants():
         if input_json['assembly'] == 'hg19':
             token_auth.current_user().last_knownHG19_request = datetime.utcnow()
             token_auth.current_user().last_knownHG19_request_project_name = input_json['project_name']
-            known_dict = get_known_variants_dict_v1()['hg19']
+            known_dict = get_known_variants_dict_v1( username )['hg19']
         elif input_json['assembly'] == 'hg38':
             token_auth.current_user().last_knownHG38_request = datetime.utcnow()
             token_auth.current_user().last_knownHG38_request_project_name = input_json['project_name']
-            known_dict = get_known_variants_dict_v1()['hg38']
+            known_dict = get_known_variants_dict_v1( username )['hg38']
         db.session.commit()
         dictToReturn = ({ 'known_dict' : known_dict })
     else:
