@@ -22,3 +22,10 @@ def before_request():
 @bp.route('/index')
 def index():
     return( render_template( 'index_DXcator.html' ) )
+
+
+@bp.route('/commandVEP', methods=['GET'])
+def commandVEP():
+    return render_template('commandVEP_DXcator.html', title='Tutorial',
+                    SERVER_ADDRESS = SERVER_ADDRESS
+                    )
