@@ -26,6 +26,4 @@ def index():
 
 @bp.route('/commandVEP', methods=['GET'])
 def commandVEP():
-    return render_template('commandVEP_DXcator.html', title='Tutorial',
-                    SERVER_ADDRESS = SERVER_ADDRESS
-                    )
+    return render_template('commandVEP_DXcator.html', title='VEP command')
