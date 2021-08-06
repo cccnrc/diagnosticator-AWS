@@ -1,0 +1,70 @@
+{% extends "base_DXcator.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<style>
+  #close:hover {
+      float:right;
+      display:inline-block;
+      padding:2px 5px;
+      background:#ccc;
+      color:#fff;
+  }
+  #close {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+  }
+
+</style>
+
+
+<body style="text-align: center; vertical-align: middle;"
+
+  <div style="margin-top: 15%;">
+    <h1 style="font-weight: bold;" >Filtering Parameters</h1>
+  <div style="border: 0px solid blue; max-width: 100%; background-color: rgba(255, 0, 0, 0.3); " >
+    <span id='close' onclick='this.parentNode.parentNode.removeChild(this.parentNode); return false;'>x</span>
+    <div style="text-align: justify; font-size: 150%; padding: 5%;" >
+      <stream style="font-weight: bold; font-size: 120%;"> 1. Maximum Allele Frequency </stream>
+      <br>
+      <stream style="text-decoration: underline; font-weight: bold;">popmax AF</stream>: this value specifies the maximum Allele Frequency (AF) that a particular variant can reach in <stream style="text-decoration: underline;">any sub-population</stream>. This is screened on gnomAD (exome and genome), ExAC, 1000G, ESP6500, and UK10K: if a given variant
+      AF in any sub-population in any of those databases exceed the selected MAF, then the variant is not considered among possible diagnsotic results.
+      If in doubt and you can use a: <stream style="font-family: monospace;">10E-4</stream>
+      <br>
+      <br>
+      <stream style="font-weight: bold; font-size: 120%;"> 2. Maximum Allele Count </stream>
+      <br>
+      <stream style="text-decoration: underline; font-weight: bold;">max AC</stream>: this value specifies the Allele Count (AC) of a variant in your internal population (according with the VCF annotation):
+      if a variant exceeds this number, then it is filtered out from possible diagnostic results
+      <br>
+      <br>
+      <stream style="font-weight: bold; font-size: 120%;"> 3. Variant Consequences </stream>
+      <br>
+      This parameters allows you to specify which VEP calculated consequences (full list <a href="https://m.ensembl.org/info/genome/variation/prediction/predicted_data.html" target="_blank">here</a>) you want to <stream style="text-decoration: underline;">exclude</stream> from your analysis.
+      As example, you probably don't want to consider in your analysis <stream style="text-decoration: underline;">intergenic</stream> or <stream style="text-decoration: underline;">intronic</stream> variants when analyzing WGS results, so just
+      select them and they won't show up in results. Be strict in your analysis, you don't wanna spend all your day rewieving negative results.
+    </div>
+  </div>
+  </div>
+
+</body>
+
+
+
+
+<script>
+  window.onload = function(){
+      document.getElementById('close').onclick = function(){
+          this.parentNode.parentNode
+          .removeChild(this.parentNode);
+          return false;
+      };
+  };
+</script>
+
+
+
+
+{% endblock %}

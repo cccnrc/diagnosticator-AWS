@@ -23,7 +23,13 @@ def before_request():
 def index():
     return( render_template( 'index_DXcator.html' ) )
 
-
+########################################################
+################      DOCUMENTATION      ###############
+########################################################
 @bp.route('/commandVEP', methods=['GET'])
 def commandVEP():
     return render_template('commandVEP_DXcator.html', title='VEP command')
+
+@bp.route('/filtering', methods=['GET'])
+def filtering():
+    return render_template('filtering_DXcator.html', title='Filtering')
