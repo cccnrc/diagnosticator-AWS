@@ -34,6 +34,10 @@ def commandVEP():
 def filtering():
     return render_template('filtering_DXcator.html', title='Filtering')
 
+@bp.route('/multiple_projects', methods=['GET'])
+def multiple_projects():
+    return render_template('multiple_projects_DXcator.html', title='Filtering')
+
 @bp.route('/download/<path:filename>')
 def download( filename ):
     return send_from_directory( 'static', filename, as_attachment=True )
