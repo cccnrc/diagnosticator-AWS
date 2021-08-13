@@ -1,0 +1,186 @@
+{% extends "base_DXcator.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<style>
+  #close:hover {
+      float:right;
+      display:inline-block;
+      padding:2px 5px;
+      background:#ccc;
+      color:#fff;
+  }
+  #close {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+  }
+
+  pre {
+      background: #f4f4f4;
+      border: 1px solid #ddd;
+      border-left: 3px solid #f36d33;
+      color: #666;
+      page-break-inside: avoid;
+      font-family: monospace;
+      font-size: 80%;
+      line-height: 1.6;
+      margin-bottom: 1.6em;
+      max-width: 100%;
+      overflow: auto;
+      padding: 1em 1.5em;
+      display: block;
+      word-wrap: break-word;
+  }
+
+  code {
+    font-family: monospace;
+    background: #f4f4f4;
+  }
+
+</style>
+
+
+<body style="text-align: center; vertical-align: middle;"
+
+  <div style="margin-top: 15%;">
+
+    <h1 style="font-weight: bold; color: green;" >Development Installation - Docker</h1>
+    <img src="{{ url_for('static', filename='docker-logo.png')}}" style="max-width: 15%; margin-bottom: 5%;"/>
+
+  <div style="border: 0px solid blue; max-width: 100%; background-color: rgba(255, 0, 0, 0.3); " >
+    <span id='close' onclick='this.parentNode.parentNode.removeChild(this.parentNode); return false;'>x</span>
+    <div style="text-align: justify; font-size: 150%; padding: 5%;" >
+      So you chose Docker, the first thing is to create a directory that will store all local appliation files
+      you are gonna work on and go there:
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+mkdir ~/diagnosticator-development-docker
+cd ~/diagnosticator-development-docker
+        </div>
+      </pre>
+      Now just pull our <a href="https://github.com/cccnrc/diagnosticator-local" target="_blank">GitHub repository</a> here:
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+git clone https://github.com/cccnrc/diagnosticator-local.git
+        </div>
+      </pre>
+      that contains the <code>Dockerfile</code> you will use to locally build the diagnosticator image.
+      <br>
+      <br>
+      Now we need to take care of the rest of dependencies that Diagnosticator requires:
+      <div style="margin-left: 3%;">
+      1. Redis
+      <br>
+      2. VEP
+      <br>
+      3. Asilo
+      <br>
+      4. rq-worker
+      </div>
+      <br>
+      Just pull those images with:
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+docker pull redis
+docker pull cccnrc/diagnosticator-vep
+docker pull cccnrc/diagnosticator-asilo
+docker pull cccnrc/diagnosticator
+        </div>
+      </pre>
+      You also need to creare a dedicated Docker network for your images, in order for them
+      to directly communicate with each other
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+docker network create diagnosticator-development-network
+        </div>
+      </pre>
+      Now run the images inside the network in detached mode (you can change names, but be consistent in all passages later).
+      <br>
+      It is of extreme importance that you point the mounted volumes of those containers to the same
+      upload folder that Diagnosticator uses to store files:
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">UPLOAD=$( realpath ./upload )
+
+docker run --rm -d --name diagnosticator-VEP \
+  -v ${UPLOAD}:/home/VEP_INPUT \
+  --network diagnosticator-development-network \
+  cccnrc/diagnosticator-vep /bin/bash
+
+docker run --rm -d --name diagnosticator-ASILO \
+  -v ${UPLOAD}:/INPUT \
+  --network diagnosticator-development-network \
+  cccnrc/diagnosticator-asilo /bin/bash
+
+docker run --name diagnosticator-redis --rm \
+  --dns 8.8.8.8 \
+  --network diagnosticator-development-network \
+  -d -p 6377:6379 redis
+
+docker run --name diagnosticator-rq-worker --rm -d \
+  -e REDIS_URL=redis://diagnosticator-redis:6379/0 \
+  -e UPLOAD_FOLDER=/home/diagnosticator/upload \
+  --entrypoint venv/bin/rq \
+  --network diagnosticator-development-network \
+  cccnrc/diagnosticator worker -u redis://diagnosticator-redis:6379/0 diagnosticator-tasks
+        </div>
+      </pre>
+      You are now set-up: change anything you wish in Diagnosticator files,
+      modify the application, pages etc.
+      and then build up and run the Diagnosticator local image (based on <code>Dockerfile</code> instructions):
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+docker build --no-cache -t cccnrc/diagnosticator-development:0.1 .
+
+docker run --name diagnosticator-development --rm -d \
+  -e REDIS_URL=redis://diagnosticator-redis:6379/0 \
+  -e UPLOAD_FOLDER=/home/diagnosticator/upload \
+  -e SERVER_ADDRESS=<stream style="color: orange;">&lt;this-website-URL&gt;</stream> \
+  -v ${UPLOAD}:/home/diagnosticator/upload \
+  -p 9000:5000 \
+  --expose 9000 \
+  --restart on-failure \
+  --network diagnosticator-development-network \
+  cccnrc/diagnosticator-development:0.1
+        </div>
+      </pre>
+      And enjoy all the changes you made!
+      <br>
+      <br>
+      <stream style="font-weight: bold;">IMPORTANT</stream>: don't fortget to <stream style="font-weight: bold;">SHARE</stream> with us the improvements you made through GitHub!
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+git branch <stream style="color: orange;">&lt;your-name&gt;</stream>-development
+git checkout <stream style="color: orange;">&lt;your-name&gt;</stream>-development
+git add .
+git commit -m "<stream style="color: orange;">&lt;your-name&gt;</stream>-development ..."
+git push https://github.com/cccnrc/diagnosticator-prove.git <stream style="color: orange;">&lt;your-name&gt;</stream>-development
+        </div>
+      </pre>
+      and we will see your changes and pull request! Looking forward to it! :)
+    </div>
+  </div>
+
+</div>
+
+
+</body>
+
+
+
+
+<script>
+  window.onload = function(){
+      document.getElementById('close').onclick = function(){
+          this.parentNode.parentNode
+          .removeChild(this.parentNode);
+          return false;
+      };
+  };
+</script>
+
+
+
+
+{% endblock %}

@@ -36,7 +36,23 @@ def filtering():
 
 @bp.route('/multiple_projects', methods=['GET'])
 def multiple_projects():
-    return render_template('multiple_projects_DXcator.html', title='Filtering')
+    return render_template('multiple_projects_DXcator.html', title='More')
+
+@bp.route('/installation', methods=['GET'])
+def installation():
+    return render_template('installation_DXcator.html', title='Install')
+
+@bp.route('/development_installation', methods=['GET'])
+def development_installation():
+    return render_template('development_installation_DXcator.html', title='Development')
+
+@bp.route('/development_installation_docker', methods=['GET'])
+def development_installation_docker():
+    return render_template('development_installation_docker_DXcator.html', title='Docker')
+
+@bp.route('/development_installation_flask', methods=['GET'])
+def development_installation_flask():
+    return render_template('development_installation_flask_DXcator.html', title='Flask')
 
 @bp.route('/download/<path:filename>')
 def download( filename ):
