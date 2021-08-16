@@ -7,3 +7,4 @@ migrations
 __pycache__
 requirements-new.txt
 app.db
+README-SECRET-VARIABLES.md
