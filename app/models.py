@@ -36,7 +36,7 @@ class User(UserMixin, db.Model):
     confirmed_on = db.Column(db.DateTime, nullable=True)
     variantHG19_users = db.relationship('VariantHG19User', backref='user', foreign_keys='VariantHG19User.user_id', lazy='dynamic')
     variantHG38_users = db.relationship('VariantHG38User', backref='user', foreign_keys='VariantHG38User.user_id', lazy='dynamic')
-    key = db.Column(db.String(100), unique=True)
+    key = db.Column(db.String(120), unique=True)
     last_key_request = db.Column(db.DateTime)
     last_knownHG19_request = db.Column(db.DateTime)
     last_knownHG19_request_project_name = db.Column(db.String(120))
@@ -81,7 +81,7 @@ class User(UserMixin, db.Model):
         return jwt.encode(
             {'activate': self.id, 'exp': time() + expires_in},
             current_app.config['SECRET_KEY'],
-            algorithm='HS256').decode('utf-8')
+            algorithm='HS256')
 
     @staticmethod
     def verify_jwt_token(token):
@@ -137,22 +137,6 @@ class User(UserMixin, db.Model):
 
 
 
-'''
-    below only for VARIANT_DB = SQL
-'''
-class VariantHG19( db.Model ):
-    '''
-        this stores variants and connect to relative projects
-    '''
-    __tablename__ = 'varianthg19'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(400), index=True, unique=True)
-    variant_users = db.relationship('VariantHG19User', backref='variant', foreign_keys='VariantHG19User.variant_id', lazy='dynamic')
-
-    def __repr__(self):
-        return '<Variant HG19 {}>'.format(self.name)
-
-
 
 class VariantHG19User( db.Model ):
     '''
@@ -161,33 +145,22 @@ class VariantHG19User( db.Model ):
     __tablename__ = 'varianthg19user'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    variant_id = db.Column(db.Integer, db.ForeignKey('varianthg19.id'))
+    #variant_id = db.Column(db.Integer, db.ForeignKey('varianthg19.id'))
+    variant_id = db.Column(db.String(400), index=True )
     inserted_on = db.Column(db.DateTime, default=datetime.utcnow)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     project_name = db.Column(db.String(64))
     reported_YN = db.Column(db.Boolean, default=False)
     reported = db.Column(db.String(12))
     reported_criteria = db.Column(db.String(120))
+    reported_subcriteria = db.Column(db.String(120))
     reported_status = db.Column(db.String(6))
     reported_on = db.Column(db.DateTime)
+    reported_num = db.Column(db.Integer, default=1)
 
     def __repr__(self):
         return '<Variant HG19 ID: {0} - User ID: {1}>'.format( self.variant_id, self.user_id )
 
-
-
-
-class VariantHG38( db.Model ):
-    '''
-        this stores variants and connect to relative projects
-    '''
-    __tablename__ = 'varianthg38'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(400), index=True, unique=True)
-    variant_users = db.relationship('VariantHG38User', backref='variant', foreign_keys='VariantHG38User.variant_id', lazy='dynamic')
-
-    def __repr__(self):
-        return '<Variant HG38 {}>'.format(self.name)
 
 
 
@@ -198,15 +171,18 @@ class VariantHG38User( db.Model ):
     __tablename__ = 'varianthg38user'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    variant_id = db.Column(db.Integer, db.ForeignKey('varianthg38.id'))
+    #variant_id = db.Column(db.Integer, db.ForeignKey('varianthg38.id'))
+    variant_id = db.Column(db.String(400), index=True )
     inserted_on = db.Column(db.DateTime, default=datetime.utcnow)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     project_name = db.Column(db.String(64))
     reported_YN = db.Column(db.Boolean, default=False)
     reported = db.Column(db.String(12))
     reported_criteria = db.Column(db.String(120))
+    reported_subcriteria = db.Column(db.String(120))
     reported_status = db.Column(db.String(6))
     reported_on = db.Column(db.DateTime)
+    reported_num = db.Column(db.Integer, default=1)
 
     def __repr__(self):
         return '<Variant HG38 ID: {0} - User ID: {1}>'.format( self.variant_id, self.user_id )

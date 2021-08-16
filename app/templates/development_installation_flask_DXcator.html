@@ -1,0 +1,196 @@
+{% extends "base_DXcator.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<style>
+  #close:hover {
+      float:right;
+      display:inline-block;
+      padding:2px 5px;
+      background:#ccc;
+      color:#fff;
+  }
+  #close {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+  }
+
+  pre {
+      background: #f4f4f4;
+      border: 1px solid #ddd;
+      border-left: 3px solid #f36d33;
+      color: #666;
+      page-break-inside: avoid;
+      font-family: monospace;
+      font-size: 80%;
+      line-height: 1.6;
+      margin-bottom: 1.6em;
+      max-width: 100%;
+      overflow: auto;
+      padding: 1em 1.5em;
+      display: block;
+      word-wrap: break-word;
+  }
+
+  code {
+    font-family: monospace;
+    background: #f4f4f4;
+  }
+
+</style>
+
+
+<body style="text-align: center; vertical-align: middle;"
+
+  <div style="margin-top: 15%;">
+
+  <h1 style="font-weight: bold; color: green;" >Development Installation - Flask</h1>
+  <img src="{{ url_for('static', filename='flask-logo.png')}}" style="max-width: 10%; margin-bottom: 5%;"/>
+
+  <div style="border: 0px solid blue; max-width: 100%; background-color: rgba(255, 0, 0, 0.3); " >
+    <span id='close' onclick='this.parentNode.parentNode.removeChild(this.parentNode); return false;'>x</span>
+    <div style="text-align: justify; font-size: 150%; padding: 5%;" >
+      So you chose Flask, the first thing is to create a directory that will store all local appliation files
+      you are gonna work on and go there:
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+mkdir ~/diagnosticator-development-flask
+cd ~/diagnosticator-development-flask
+        </div>
+      </pre>
+      Now just pull our <a href="https://github.com/cccnrc/diagnosticator-local" target="_blank">GitHub repository</a> here:
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+git clone https://github.com/cccnrc/diagnosticator-local.git
+        </div>
+      </pre>
+      Now we need to take care of the rest of dependencies that Diagnosticator requires:
+      <div style="margin-left: 3%;">
+      1. Redis
+      <br>
+      2. VEP
+      <br>
+      3. Asilo
+      <br>
+      4. rq-worker
+      </div>
+      <br>
+      Just pull those images with:
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+docker pull redis
+docker pull cccnrc/diagnosticator-vep
+docker pull cccnrc/diagnosticator-asilo
+        </div>
+      </pre>
+      You can now create your own Python (3.9 recommended) virtual environment that you will use to serve the Flask application:
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+python3.9 -m venv venv
+        </div>
+      </pre>
+      Now put some environment variables inside that venv and run it:
+      <br>
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+echo '
+### ENV variables
+export MAIL_SERVER="smtp.gmail.com"
+export MAIL_PORT=587
+export MAIL_USE_TLS=1
+export MAIL_USERNAME=<stream style="color: orange;">&lt;your-gmail-username&gt;</stream>
+export MAIL_PASSWORD=<stream style="color: orange;">&lt;your-gmail-pwd&gt;</stream>
+export TOKEN_EXP_SEC=3600
+export TOKEN_RESTORE_EXP_SEC=1800
+export DEVELOPMENT_TESTING=0
+export UPLOAD_FOLDER=$(pwd)/upload
+export REDIS_URL="redis://127.0.0.1:6377"
+export SERVER_ADDRESS=<stream style="color: orange;">&lt;this-website-URL&gt;</stream>
+' >> venv/bin/activate
+
+source venv/bin/activate
+      </div>
+    </pre>
+    <stream style="font-weight: bold;">IMPORTANT</stream>: be sure that you have <code>venv</code> in your <code>.gitignore</code> file,
+    we don't wanna know your credentials!
+    <br>
+    <br>
+    Now run Diagnosticator Docker dependencies you pulled in the passage above:
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">UPLOAD=$( realpath ./upload )
+
+docker run --rm -d --name diagnosticator-VEP \
+  -v ${UPLOAD}:/home/VEP_INPUT \
+  cccnrc/diagnosticator-vep /bin/bash
+
+docker run --rm -d --name diagnosticator-ASILO \
+  -v ${UPLOAD}:/INPUT \
+  cccnrc/diagnosticator-asilo /bin/bash
+
+docker run --name diagnosticator-redis --rm \
+  --dns 8.8.8.8 \
+  -d -p 6377:6379 redis
+        </div>
+      </pre>
+      You are now ready to run rq-worker through Flask directly:
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+rq worker diagnosticator-tasks --url redis://127.0.0.1:6377
+        </div>
+      </pre>
+      Now just run Diagnsticator local image through Flask as well:
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+source venv/bin/activate
+flask run
+        </div>
+      </pre>
+      You are now set-up: change anything you wish in Diagnosticator files, modify the application, pages etc.
+      <br>
+      <br>
+      If you wish to change host, port, etc. serving Diagnosticator just do it through <code>.flaskenv</code> file.
+      The <code>FLASK_ENV=development</code> and <code>FLASK_DEBUG=True</code> variables in that file allow your
+      changes you make in files to take immediately effect without restarting the application.
+      <br>
+      <br>
+      And now enjoy all the changes you made!
+      <br>
+      <br>
+      <stream style="font-weight: bold;">IMPORTANT</stream>: don't fortget to <stream style="font-weight: bold;">SHARE</stream> with us the improvements you made through GitHub!
+      <pre>
+        <div style="text-align: left; float: left; padding: 0%;">
+git branch <stream style="color: orange;">&lt;your-name&gt;</stream>-development
+git checkout <stream style="color: orange;">&lt;your-name&gt;</stream>-development
+git add .
+git commit -m "<stream style="color: orange;">&lt;your-name&gt;</stream>-development ..."
+git push https://github.com/cccnrc/diagnosticator-prove.git <stream style="color: orange;">&lt;your-name&gt;</stream>-development
+        </div>
+      </pre>
+      and we will see your changes and pull request! Looking forward to it! :)
+    </div>
+  </div>
+
+</div>
+
+
+</body>
+
+
+
+
+<script>
+  window.onload = function(){
+      document.getElementById('close').onclick = function(){
+          this.parentNode.parentNode
+          .removeChild(this.parentNode);
+          return false;
+      };
+  };
+</script>
+
+
+
+
+{% endblock %}

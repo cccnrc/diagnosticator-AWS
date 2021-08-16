@@ -196,10 +196,13 @@ def confirm_email(token):
 
 
 @bp.route('/unconfirmed')
-#@login_required
+# @login_required
 def unconfirmed():
-    if current_user.confirmed:
-        return redirect(url_for('main.index'))
+    if current_user.is_anonymous:
+        flash('Please confirm your account!', 'warning')
+    else:
+        if current_user.confirmed:
+            return redirect(url_for('main.index'))
     flash('Please confirm your account!', 'warning')
     return render_template('auth/unconfirmed_DXcator.html')
 

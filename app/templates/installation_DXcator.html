@@ -1,0 +1,114 @@
+{% extends "base_DXcator.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<style>
+  #close:hover {
+      float:right;
+      display:inline-block;
+      padding:2px 5px;
+      background:#ccc;
+      color:#fff;
+  }
+  #close {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+  }
+
+  pre {
+      background: #f4f4f4;
+      border: 1px solid #ddd;
+      border-left: 3px solid #f36d33;
+      color: #666;
+      page-break-inside: avoid;
+      font-family: monospace;
+      font-size: 80%;
+      line-height: 1.6;
+      margin-bottom: 1.6em;
+      max-width: 100%;
+      overflow: auto;
+      padding: 1em 1.5em;
+      display: block;
+      word-wrap: break-word;
+  }
+
+  code {
+    font-family: monospace;
+    background: #f4f4f4;
+  }
+
+</style>
+
+
+<body style="text-align: center; vertical-align: middle;"
+
+  <div style="margin-top: 15%;">
+    <h1 style="font-weight: bold; color: green;" >Docker Installation</h1>
+  <div style="border: 0px solid blue; max-width: 100%; background-color: rgba(255, 0, 0, 0.3); " >
+    <span id='close' onclick='this.parentNode.parentNode.removeChild(this.parentNode); return false;'>x</span>
+    <div style="text-align: justify; font-size: 150%; padding: 5%;" >
+      In order to install Diagnosticator locally on your machine
+      you need to have <a href="https://docs.docker.com/get-docker/" target="_blank">Docker</a>
+      and <a href="https://docs.docker.com/compose/install/" target="_blank">Docker-Compose</a>
+      installed and running.
+      <br>
+      <br>
+      Once you have them running, you can simply download the latest <code>docker-compose.yml</code> file
+      from our repository <a href="{{ url_for( 'main.download', filename = 'docker-compose.yml' ) }}" target="_blank">here</a>
+      <br>
+      <br>
+      Save it on a dedicated folder in your local machine (<stream style="font-family: monospace;">Desktop/diagnosticator</stream>
+      in the current example) and go to that folder from your terminal:
+      <pre>
+        <div style="float: left; padding: 0%;">
+cd ~/Desktop/diagnosticator
+        </div>
+      </pre>
+      Then simply pull the containers and run Diagnosticator with:
+      <pre>
+        <div style="float: left; padding: 0%;">
+docker-compose up
+        </div>
+      </pre>
+      The first time you run it, the pulling of all
+      necessary images and building of the local application may take several
+      minutes. Once completed, the terminal output should look something like
+      this:
+      <div class="bd-example" align="middle">
+        <img src="{{ url_for('static', filename='docker-compose.png')}}" style="align: middle; max-width: 100%;"/>
+      </div>
+      <br>
+      Then you can simply click <a href="http://localhost:9000" target="_blank">here</a>.
+      <br>
+      Otherwise go to your browser (<a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Firefox</a>
+      or <a href="https://www.google.com/chrome" target="_blank">Chrome</a> recommended)
+      and copy-paste in the URL bar:
+      <code>http://localhost:9000</code>
+      <br>
+      <br>
+      That's all! You are now ready to navigate Diagnosticator! :)
+    </div>
+  </div>
+  </div>
+
+</body>
+
+
+
+
+<script>
+  window.onload = function(){
+      document.getElementById('close').onclick = function(){
+          this.parentNode.parentNode
+          .removeChild(this.parentNode);
+          return false;
+      };
+  };
+</script>
+
+
+
+
+{% endblock %}

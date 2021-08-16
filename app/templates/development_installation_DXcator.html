@@ -1,0 +1,110 @@
+{% extends "base_DXcator.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<style>
+  #close:hover {
+      float:right;
+      display:inline-block;
+      padding:2px 5px;
+      background:#ccc;
+      color:#fff;
+  }
+  #close {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+  }
+
+  pre {
+      background: #f4f4f4;
+      border: 1px solid #ddd;
+      border-left: 3px solid #f36d33;
+      color: #666;
+      page-break-inside: avoid;
+      font-family: monospace;
+      font-size: 80%;
+      line-height: 1.6;
+      margin-bottom: 1.6em;
+      max-width: 100%;
+      overflow: auto;
+      padding: 1em 1.5em;
+      display: block;
+      word-wrap: break-word;
+  }
+
+  code {
+    font-family: monospace;
+    background: #f4f4f4;
+  }
+
+</style>
+
+
+<body style="text-align: center; vertical-align: middle;"
+
+  <div style="margin-top: 15%;">
+    <h1 style="font-weight: bold; color: green;" >Development Installation</h1>
+  <div style="border: 0px solid blue; max-width: 100%; background-color: rgba(255, 0, 0, 0.3); " >
+    <span id='close' onclick='this.parentNode.parentNode.removeChild(this.parentNode); return false;'>x</span>
+    <div style="text-align: justify; font-size: 150%; padding: 5%;" >
+      If you got there it means that you are one of those techie enthusiast just like us! Nice to meet you :)
+      <br>
+      <br>
+      First thing first, for the development you can choose two different ways to work on Diagnosticator:
+      <div style="margin-left: 3%;">
+      1. through <a href="https://docs.docker.com/get-docker/" target="_blank">Docker</a> containers
+      <br>
+      2. directly through <a href="https://flask.palletsprojects.com/en/2.0.x/" target="_blank">Flask</a>
+      </div>
+      <br>
+      The difference is just the time it takes for your changes to take place on the application and portability,
+      the Flask-way it is straightforward and you will see changes effect immediately, through Docker you need
+      to re-build the image and run it. On the other hand, the Flask-way requires more set-up work.
+      <br>
+      <br>
+      As all techies we assume you work on <a href="https://www.linux.org/" target="_blank">Linux</a>
+      <img src="{{ url_for('static', filename='linux-logo.png')}}" style="display: inline-block; max-width: 5%;"/>
+      <br>
+      <br>
+      Now the time has come to make your choice:
+    </div>
+  </div>
+
+  <div id="outer-images" style="margin-left: 10%; max-width: 80%; margin-top: 2%;">
+    <a href="{{ url_for('main.development_installation_docker' )}}">
+      <div id="left-image" style="float: left; display: inline-block; max-width: 40%;  margin-top: 5%;">
+        <img src="{{ url_for('static', filename='docker-logo.png')}}" style="display: inline-block; max-width: 100%;"/>
+      </div>
+    </a>
+    <a href="{{ url_for('main.development_installation_flask' )}}">
+      <div id="right-image" style="float: right; display: inline-block; max-width: 30%; margin-right: 5%;">
+        <img src="{{ url_for('static', filename='flask-logo.png')}}" style="max-width: 100%;"/>
+      </div>
+    </a>
+  </div>
+
+
+</div>
+
+
+</body>
+
+
+
+
+<script>
+  window.onload = function(){
+      document.getElementById('close').onclick = function(){
+          this.parentNode.parentNode
+          .removeChild(this.parentNode);
+          return false;
+      };
+  };
+</script>
+
+
+
+
+{% endblock %}

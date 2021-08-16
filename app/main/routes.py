@@ -1,7 +1,7 @@
 from app.main import bp
 from app import db
 from flask import flash
-from flask import render_template, current_app
+from flask import render_template, current_app, send_from_directory
 from flask_login import login_user, logout_user, current_user, login_required
 from app.decorators import check_confirmed
 from datetime import datetime
@@ -22,3 +22,38 @@ def before_request():
 @bp.route('/index')
 def index():
     return( render_template( 'index_DXcator.html' ) )
+
+########################################################
+################      DOCUMENTATION      ###############
+########################################################
+@bp.route('/commandVEP', methods=['GET'])
+def commandVEP():
+    return render_template('commandVEP_DXcator.html', title='VEP command')
+
+@bp.route('/filtering', methods=['GET'])
+def filtering():
+    return render_template('filtering_DXcator.html', title='Filtering')
+
+@bp.route('/multiple_projects', methods=['GET'])
+def multiple_projects():
+    return render_template('multiple_projects_DXcator.html', title='More')
+
+@bp.route('/installation', methods=['GET'])
+def installation():
+    return render_template('installation_DXcator.html', title='Install')
+
+@bp.route('/development_installation', methods=['GET'])
+def development_installation():
+    return render_template('development_installation_DXcator.html', title='Development')
+
+@bp.route('/development_installation_docker', methods=['GET'])
+def development_installation_docker():
+    return render_template('development_installation_docker_DXcator.html', title='Docker')
+
+@bp.route('/development_installation_flask', methods=['GET'])
+def development_installation_flask():
+    return render_template('development_installation_flask_DXcator.html', title='Flask')
+
+@bp.route('/download/<path:filename>')
+def download( filename ):
+    return send_from_directory( 'static', filename, as_attachment=True )
