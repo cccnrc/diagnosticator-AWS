@@ -38,6 +38,7 @@ Werkzeug==2.0.1
 WTForms==2.3.3
 
 # added requirements
+boto3==1.18.21
 cffi==1.14.4
 cryptography==3.3.2
 DateTime==4.3
