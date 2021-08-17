@@ -33,6 +33,7 @@ def send_email(app, recipients, sender=None, subject='', text_body='', html_body
 
 
 '''
+### OLD mail sender with flask_mail
 def send_email(subject, sender, recipients, text_body, html_body,
                attachments=None, sync=False):
     msg = Message(subject, sender=sender, recipients=recipients)
