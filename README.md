@@ -19,7 +19,7 @@ SQL_DB_DIR="<path-to-folder-for-MySQL-DB>"
 docker pull mysql/mysql-server
 docker run --name=mysql -p 3306:3306 -v "${SQL_DB_DIR}":/var/lib/mysql -d mysql/mysql-server
 sleep 10  # wait until deployed
-MYSQL_ROOT_PWD=$( docker logs mysql 2>&1 | grep GENERATED | cut -d':' -f2 | tr -d ' ' )
+MYSQL_ROOT_PWD=$( docker logs mysql 2>&1 | grep GENERATED | cut -d':' -f2,3,4,5,6 | tr -d ' ' )
 
 #### create MySQL users on docker
 docker exec -it mysql mysql -uroot -p"${MYSQL_ROOT_PWD}"
@@ -59,6 +59,9 @@ flask db upgrade
 
 ### start serving app on port 5000
 exec gunicorn -b :5000 --access-logfile - --error-logfile - main:app
+
+### access MYSQL-DB
+
 ```
 
 
