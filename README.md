@@ -64,6 +64,30 @@ exec gunicorn -b :5000 --access-logfile - --error-logfile - main:app
 
 ### AWS-SERVER
 ```
+APP_DIR="/home/ec2-user/diagnosticator-server-AWS/diagnosticator-AWS"   # put yours DIR here
 git clone https://github.com/cccnrc/diagnosticator-AWS.git
-cd /home/enrico/columbia/diagnosticator-AWS/diagnosticator-server-AWS-00-LOCAL
+cd ${APP_DIR}
+vim venv/bin/activate                     # store your credentials and other environment variables
+gunicorn -b 0.0.0.0:8001 -w 1 main:app    # check APP
+
+### GUNICORN
+sudo vim /etc/systemd/system/diagnosticator.service      # create systemd service (store here ENV variables)
+sudo systemctl daemon-reload
+sudo systemctl start diagnosticator
+sudo systemctl enable diagnosticator
+sudo systemctl status diagnosticator
+sudo systemctl restart diagnosticator
+
+### NGINX
+cd ~
+amazon-linux-extras list | grep nginx               # check available options
+sudo amazon-linux-extras install nginx1             # actually install it
+sudo vim /etc/nginx/nginx.conf                      # default NGINX conf file
+sudo vim /etc/nginx/conf.d/diagnosticator.conf      # create the NGINX conf file
+sudo nginx -t                                       # check it works fine
+sudo service nginx reload                           # restart nginx
+
+### to let NGINX serve static files directly you need to add your user to www-data and chown of the DIR:
+sudo usermod -a -G ec2-user www-data
+sudo chown -R :www-data  /home/ec2-user/diagnosticator-server-AWS/diagnosticator-AWS/app/static
 ```
