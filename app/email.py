@@ -28,19 +28,21 @@ def get_AWS_credentials():
             'AWS_SESSION_TOKEN' : AWS_SESSION_TOKEN,
             'AWS_SESSION_TOKEN_EXP' : AWS_SESSION_TOKEN_EXP
         })
-        if EXP < NOW:
+        if EXP > NOW:
             return( CRED_DICT )
     return( False )
 
 
+
 def send_email(app, recipients, sender=None, subject='', text_body='', html_body='',
                 attachments=None, sync=False):
+    CRED_DICT = get_AWS_credentials()
     ses = boto3.client(
         'ses',
         region_name = current_app.config['SES_REGION_NAME'],
-        aws_access_key_id = current_app.config['AWS_ACCESS_KEY_ID'],
-        aws_secret_access_key = current_app.config['AWS_SECRET_ACCESS_KEY'],
-        aws_session_token = current_app.config['AWS_SESSION_TOKEN']
+        aws_access_key_id = CRED_DICT['AWS_ACCESS_KEY_ID'],
+        aws_secret_access_key = CRED_DICT['AWS_SECRET_ACCESS_KEY'],
+        aws_session_token = CRED_DICT['AWS_SESSION_TOKEN']
     )
     if not sender:
         sender = current_app.config['SES_EMAIL_SOURCE']
