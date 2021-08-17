@@ -52,8 +52,8 @@ def send_email(app, recipients, sender=None, subject='', text_body='', html_body
         Message={
             'Subject': {'Data': subject},
             'Body': {
-                'Text': {'Data': text},
-                'Html': {'Data': html}
+                'Text': {'Data': text_body},
+                'Html': {'Data': html_body}
             }
         }
     )
