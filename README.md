@@ -90,4 +90,11 @@ sudo service nginx reload                           # restart nginx
 ### to let NGINX serve static files directly you need to add your user to www-data and chown of the DIR:
 sudo usermod -a -G ec2-user www-data
 sudo chown -R :www-data  /home/ec2-user/diagnosticator-server-AWS/diagnosticator-AWS/app/static
+
+
+### APP UPDATES
+cd $APP_DIR
+git pull
+sudo systemctl restart diagnosticator
+sudo service nginx reload
 ```

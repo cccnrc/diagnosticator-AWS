@@ -27,3 +27,4 @@ class Config(object):
     AWS_SESSION_TOKEN = os.environ.get('AWS_SESSION_TOKEN')
     SES_REGION_NAME = os.environ.get('SES_REGION_NAME')
     SES_EMAIL_SOURCE = os.environ.get('SES_EMAIL_SOURCE')
+    CREDENTIALS_URL = os.environ.get('CREDENTIALS_URL')

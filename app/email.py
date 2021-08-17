@@ -3,10 +3,35 @@ from flask import current_app
 from flask_mail import Message
 from app import mail
 import boto3
+import requests
+import json
+import datetime
 
 def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)
+
+
+def get_AWS_credentials():
+    r = requests.get( current_app.config['CREDENTIALS_URL'] )
+    JR = r.json()
+    if JR['Code'] == 'Success':
+        AWS_ACCESS_KEY_ID = JR['AccessKeyId']
+        AWS_SECRET_ACCESS_KEY = JR['SecretAccessKey']
+        AWS_SESSION_TOKEN = JR['Token']
+        AWS_SESSION_TOKEN_EXP = JR['Expiration']
+        NOW = datetime.datetime.utcnow()
+        EXP = datetime.datetime.strptime( r.json()['Expiration'], "%Y-%m-%dT%H:%M:%SZ")
+        CRED_DICT = ({
+            'AWS_ACCESS_KEY_ID' : AWS_ACCESS_KEY_ID,
+            'AWS_SECRET_ACCESS_KEY' : AWS_SECRET_ACCESS_KEY,
+            'AWS_SESSION_TOKEN' : AWS_SESSION_TOKEN,
+            'AWS_SESSION_TOKEN_EXP' : AWS_SESSION_TOKEN_EXP
+        })
+        if EXP < NOW:
+            return( CRED_DICT )
+    return( False )
+
 
 def send_email(app, recipients, sender=None, subject='', text_body='', html_body='',
                 attachments=None, sync=False):
