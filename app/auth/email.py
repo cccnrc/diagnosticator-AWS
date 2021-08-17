@@ -16,6 +16,7 @@ def send_activation_email(user):
     send_email('[Diagnosticator] Confirm Your Mail',
                # sender=current_app.config['ADMINS'][0],
                recipients=[user.email],
+               subject = 'Diagnosticator - confirm your email',
                text_body=render_template('email/activate.txt',
                                          user=user, token=token),
                html_body=render_template('email/activate.html',
