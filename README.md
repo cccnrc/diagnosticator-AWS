@@ -65,5 +65,5 @@ exec gunicorn -b :5000 --access-logfile - --error-logfile - main:app
 ### AWS-SERVER
 ```
 git clone https://github.com/cccnrc/diagnosticator-AWS.git
-cd 
+cd /home/enrico/columbia/diagnosticator-AWS/diagnosticator-server-AWS-00-LOCAL
 ```
