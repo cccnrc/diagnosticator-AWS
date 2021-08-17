@@ -1,4 +1,4 @@
-docker-compose.yml
+docker-compose-SERVER.yml
 README-SECRET-VARIABLES.md
 README-HEROKU.md
 README-LOCAL.md
