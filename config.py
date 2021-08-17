@@ -22,3 +22,8 @@ class Config(object):
     VARIANT_DB = os.environ.get('VARIANT_DB')
     TOKEN_EXP_SEC = os.environ.get('TOKEN_EXP_SEC')
     TOKEN_RESTORE_EXP_SEC = os.environ.get('TOKEN_RESTORE_EXP_SEC')
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_SESSION_TOKEN = os.environ.get('AWS_SESSION_TOKEN')
+    SES_REGION_NAME = os.environ.get('SES_REGION_NAME')
+    SES_EMAIL_SOURCE = os.environ.get('SES_EMAIL_SOURCE')
