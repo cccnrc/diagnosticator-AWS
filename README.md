@@ -98,6 +98,7 @@ sudo chown -R :www-data  /home/ec2-user/diagnosticator-server-AWS/diagnosticator
 ### APP UPDATES
 cd $APP_DIR
 git pull
+sudo systemctl daemon-reload
 sudo systemctl restart diagnosticator
 sudo service nginx reload
 ```
