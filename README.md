@@ -61,7 +61,7 @@ flask db upgrade
 exec gunicorn -b :5000 --access-logfile - --error-logfile - main:app
 
 ### access MYSQL-DB
-
+docker exec -it mysql mysql -udiagnosticator -pdiagnosticator
 ```
 
 
