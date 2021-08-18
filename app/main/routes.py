@@ -27,33 +27,41 @@ def index():
 ################      DOCUMENTATION      ###############
 ########################################################
 @bp.route('/commandVEP', methods=['GET'])
+@login_required
 def commandVEP():
     return render_template('commandVEP_DXcator.html', title='VEP command')
 
 @bp.route('/filtering', methods=['GET'])
+@login_required
 def filtering():
     return render_template('filtering_DXcator.html', title='Filtering')
 
 @bp.route('/multiple_projects', methods=['GET'])
+@login_required
 def multiple_projects():
     return render_template('multiple_projects_DXcator.html', title='More')
 
 @bp.route('/installation', methods=['GET'])
+@login_required
 def installation():
     return render_template('installation_DXcator.html', title='Install')
 
 @bp.route('/development_installation', methods=['GET'])
+@login_required
 def development_installation():
     return render_template('development_installation_DXcator.html', title='Development')
 
 @bp.route('/development_installation_docker', methods=['GET'])
+@login_required
 def development_installation_docker():
     return render_template('development_installation_docker_DXcator.html', title='Docker')
 
 @bp.route('/development_installation_flask', methods=['GET'])
+@login_required
 def development_installation_flask():
     return render_template('development_installation_flask_DXcator.html', title='Flask')
 
 @bp.route('/download/<path:filename>')
+@login_required
 def download( filename ):
     return send_from_directory( 'static', filename, as_attachment=True )

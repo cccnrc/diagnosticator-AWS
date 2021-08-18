@@ -74,6 +74,7 @@ vim venv/bin/activate                     # store your credentials and other env
 gunicorn -b 0.0.0.0:8001 -w 1 main:app    # check APP
 
 ### GUNICORN
+vim ${APP_DIR}/gunicorn_conf.py                          # edit gunicorn configuration to match your system
 sudo vim /etc/systemd/system/diagnosticator.service      # create systemd service (store here ENV variables)
 sudo systemctl daemon-reload
 sudo systemctl start diagnosticator
