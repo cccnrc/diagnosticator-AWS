@@ -1,0 +1,147 @@
+{% extends "base_DXcator.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<style>
+
+  div#main {
+    border: 0px solid #eee;
+    position: relative;
+    text-align: center;
+    margin-top: 5%;
+    margin-bottom: 5%;
+  }
+
+  div#main > ul {
+    visibility: visible;
+    opacity: 1;
+    font-size: 150%;
+    border-bottom: 3px solid red;
+    border-top: 3px solid red;
+    padding: 2%;
+  }
+
+  div#external {
+    border: 0px solid #eee;
+    position: relative;
+    text-align: center;
+  }
+  div#external > ul {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+    position: relative;
+  }
+  div#external:hover > ul {
+    visibility: visible;
+    opacity: 1;
+    font-size: 100%;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    padding: 2%;
+    margin-bottom: 5%;
+    text-align: justify;
+  }
+  div#external > dl {
+    visibility: visible;
+    opacity: 1;
+    vertical-align: middle;
+  }
+  div#external:hover > dl {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+  }
+
+  .chapter {
+    text-align: left;
+
+  }
+
+  .vertical-center {
+    margin: 0;
+    margin-left: -40%;
+    text-align: left;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    display: inline-block;
+    color: #D40000;
+    font-weight: normal;
+    font-size: 180%;
+    font-family: monospace;
+    max-width: 80%;
+    border: 0px solid blue;
+  }
+
+
+</style>
+
+  <div id="main">
+    <ul>
+      <stream style="color: red; font-size: 150%; font-weight: bold; font-family: monospace;">Documentation</stream>
+      <br>
+      <div style="text-align: justify;">
+
+        <div id="external">
+          <dl>
+            <div class="chapter">
+              1. <img style="max-width: 4%;" src="{{ url_for( 'static', filename = 'privacy-icon.svg') }}"/> Data Privacy
+            </div>
+          </dl>
+          <ul>
+            <stream style="font-size: 150%; font-weight: bold;">
+            1. <img style="max-width: 4%;" src="{{ url_for( 'static', filename = 'privacy-icon.svg') }}"/> Data Privacy
+            </stream>
+            <br>
+            Your Diagnosticator local application will only share with the server your
+            <stream style="text-decoration: underline;">username</stream>,
+            <stream style="text-decoration: underline;">project name</stream> and the
+            <stream style="text-decoration: underline;">variant coordinates (chr-pos-ref-alt)</stream>
+            of the accepted variants. In order to allow contact you regarding possible changes about your
+            variants interpretaion (e.g. other users annotating the same variants, changes in publicly available DBs, etc.)
+            <br>
+            Every time you accept a variant as disease-causing for a patient
+            you will be asked regarding wether you actually wants to share your variants annotation with the
+            central server or not. Thus, you are <stream style="text-decoration: underline;">always free</stream>
+            to choose what you want to share and what you do not want to.
+            <br>
+            We strongly encourage you to share your work with the rest of the Diagnosticator community
+            as you will take advantage of other people work as well in your project annotation.
+            Sharing is caring, but always be sure to share what you really want to.
+          </ul>
+        </div>
+
+
+        <div id="external">
+          <dl>
+            <div class="chapter">
+              2. <img style="max-width: 4%;" src="{{ url_for( 'static', filename = 'file-icon.png') }}"/> File Storage
+            </div>
+          </dl>
+          <ul>
+            <stream style="font-size: 150%; font-weight: bold;">
+            2. <img style="max-width: 4%;" src="{{ url_for( 'static', filename = 'file-icon.png') }}"/> File Storage
+            </stream>
+            <br>
+            All the VCF and genelist files you will use for your clinical annotation on Diagnosticator
+            live locally on the machine you are using to run the Diagnosticator local application.
+            <br>
+            This means that <stream style="text-decoration: underline;">you and only you</stream>
+            are responsible for any unwanted access to that machine
+            and consequently to all your files stored there (not only Diagnosticator ones). The way
+            the local application is configured expose your application only on your localhost network,
+            meaning that no port will be accessible from outside network on your local machine (unless you
+            modify Diagnosticator configuration files to allow so).
+            <br>
+          </ul>
+        </div>
+
+
+      </div>
+    </ul>
+  </div>
+
+
+{% endblock %}

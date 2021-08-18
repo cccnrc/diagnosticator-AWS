@@ -65,3 +65,7 @@ def development_installation_flask():
 @login_required
 def download( filename ):
     return send_from_directory( 'static', filename, as_attachment=True )
+
+@bp.route('/documentation')
+def documentation():
+    return render_template('documentation.html', title='Doc')

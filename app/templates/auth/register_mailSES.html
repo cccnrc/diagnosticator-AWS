@@ -1,0 +1,53 @@
+{% extends "base_DXcator.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<style>
+
+  div#external {
+    border: 0px solid #eee;
+    position: relative;
+    text-align: center;
+    margin-top: 5%;
+    margin-bottom: 5%;
+  }
+
+  div#external > ul {
+    visibility: visible;
+    opacity: 1;
+    font-size: 150%;
+    border-bottom: 3px solid red;
+    border-top: 3px solid red;
+    padding: 2%;
+  }
+
+</style>
+
+  <div id="external">
+    <ul>
+      <stream style="color: red; font-size: 150%; font-weight: bold;">ATTENTION</stream>
+      <br>
+      <a style="" href="https://aws.amazon.com" target="_blank">Amazon Web Services (AWS)</a> mail service (<a style="" href="https://aws.amazon.com/ses/" target="_blank">Amazon Simple Email Service</a>)
+      on wich we are currently run our Diagnosticator application,
+      requires every receiver mail-address to be <a style="" href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html#verify-email-addresses-procedure" target="_blank">verified</a>
+      otherwise you won't receive your activation mail and after registration you will be shown an
+      "Internal Server Error" page.
+      <br>
+      We asked AWS to enable Diagnosticator to send mail to SES-unverified addresses as well,
+      and our request is now under review. We hope to remove this banner <stream style="font-weight: bold;">ASAP</stream>!
+      <br>
+      <br>
+      In the meanwhile please cosider <a style="" href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html#verify-email-addresses-procedure" target="_blank">verify your mail address</a> in SES to fully use the application.
+      <br>
+      We realize this is disappointing :( Thank for your patience
+    </ul>
+  </div>
+
+
+    <h1>Register</h1>
+    <div class="row">
+        <div class="col-md-4">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+{% endblock %}
