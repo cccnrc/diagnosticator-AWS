@@ -123,7 +123,7 @@ def register():
         send_activation_email(user)
         flash('A confirmation email has been sent via email.', 'success')
         return redirect(url_for('auth.login'))
-    return render_template('auth/register_mailSES.html', title='Register',
+    return render_template('auth/register.html', title='Register',
                            form=form)
 
 
