@@ -2,6 +2,77 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
+<style>
+
+  div#external {
+    border: 0px solid #eee;
+    position: relative;
+    text-align: center;
+  }
+  div#external > ul {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+    position: relative;
+  }
+  div#external:hover > ul {
+    visibility: visible;
+    opacity: 1;
+    font-size: 150%;
+    border-bottom: 3px solid red;
+    border-top: 3px solid red;
+    padding: 2%;
+  }
+  div#external > dl {
+    visibility: visible;
+    opacity: 1;
+    vertical-align: middle;
+  }
+  div#external:hover > dl {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+  }
+
+  .vertical-center {
+    margin: 0;
+    margin-left: -10%;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    display: inline-block;
+    color: red;
+    font-weight: bold;
+    font-size: 200%;
+  }
+
+</style>
+
+  <div id="external">
+    <dl>
+      <div class="vertical-center">
+        ATTENTION <br><stream style="color: red; font-weight: normal; font-size: 80%;">(mouseover)
+      </div>
+    </dl>
+    <ul>
+      <a style="" href="https://aws.amazon.com" target="_blank">Amazon Web Services (AWS)</a> mail service (<a style="" href="https://aws.amazon.com/ses/" target="_blank">Amazon Simple Email Service</a>)
+      on wich we are currently run our Diagnosticator application,
+      requires every receiver mail-address to be <a style="" href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html#verify-email-addresses-procedure" target="_blank">verified</a>
+      otherwise you won't receive your activation mail and after registration you will be shown an
+      "Internal Server Error" page.
+      <br>
+      We asked AWS to enable Diagnosticator to send mail to SES-unverified addresses as well,
+      and our request is now under review. We hope to remove this banner <stream style="font-weight: bold;">ASAP</stream>!
+      <br>
+      <br>
+      In the meanwhile please cosider <a style="" href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html#verify-email-addresses-procedure" target="_blank">verify your mail address</a> in SES to fully use the application.
+      <br>
+      We realize this is disappointing :( Thank for your patience
+    </ul>
+  </div>
+
+
     <h1>Register</h1>
     <div class="row">
         <div class="col-md-4">
