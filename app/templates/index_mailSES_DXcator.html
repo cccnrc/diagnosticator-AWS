@@ -1,0 +1,139 @@
+{% extends "base_DXcator.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<style>
+  #close:hover {
+      float:right;
+      display:inline-block;
+      padding:2px 5px;
+      background:#ccc;
+      color:#fff;
+  }
+  #close {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+  }
+
+  pre {
+      background: #f4f4f4;
+      border: 1px solid #ddd;
+      border-left: 3px solid #f36d33;
+      color: #666;
+      page-break-inside: avoid;
+      font-family: monospace;
+      font-size: 80%;
+      line-height: 1.6;
+      margin-bottom: 1.6em;
+      max-width: 100%;
+      overflow: auto;
+      padding: 1em 1.5em;
+      display: block;
+      word-wrap: break-word;
+  }
+
+  code {
+    font-family: monospace;
+    background: #f4f4f4;
+  }
+
+  div#external {
+    border: 0px solid #eee;
+    position: relative;
+    text-align: center;
+  }
+  div#external > ul {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+    position: relative;
+  }
+  div#external:hover > ul {
+    visibility: visible;
+    opacity: 1;
+    font-size: 150%;
+    border-bottom: 1px solid red;
+    border-top: 1px solid red;
+    padding: 2%;
+  }
+  div#external > dl {
+    visibility: visible;
+    opacity: 1;
+    vertical-align: middle;
+  }
+  div#external:hover > dl {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+  }
+
+  .vertical-center {
+    margin: 0;
+    margin-left: -10%;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    display: inline-block;
+    color: red;
+    font-weight: bold;
+    font-size: 200%;
+  }
+
+</style>
+
+<body style="text-align: center; background-color: #404040; color: white; vertical-align: middle;"
+  <div style="text-align: center; ">
+
+    <div id="external">
+      <dl>
+        <div class="vertical-center">
+          ATTENTION <br><stream style="color: white; font-weight: normal; font-size: 80%;">(mouseover)
+        </div>
+      </dl>
+      <ul>
+        <a style="" href="https://aws.amazon.com" target="_blank">Amazon Web Services (AWS)</a> mail service (<a style="" href="https://aws.amazon.com/ses/" target="_blank">Amazon Simple Email Service</a>)
+        on wich we are currently run our Diagnosticator application,
+        requires every receiver mail-address to be <a style="" href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html#verify-email-addresses-procedure" target="_blank">verified</a>
+        otherwise you won't receive your activation mail and after registration you will be shown an
+        "Internal Server Error" page.
+        <br>
+        We asked AWS to enable Diagnosticator to send mail to SES-unverified addresses as well,
+        and our request is now under review. We hope to remove this banner <stream style="font-weight: bold;">ASAP</stream>!
+        <br>
+        <br>
+        In the meanwhile please cosider <a style="" href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html#verify-email-addresses-procedure" target="_blank">verify your mail address</a> in SES to fully use the application.
+        <br>
+        We realize this is disappointing :( Thank for your patience
+      </ul>
+    </div>
+
+    <br>
+    <br>
+    <h1>Welcome to <stream style="font-weight: bold; color: red; font-size: 130%;">Diagnosticator</stream></h1>
+    <br>
+    <img style="margin-top: 1%; max-width: 40%; max-height: 40%;" src="{{ url_for('static', filename='alligator.AGCT.white.trasnparent.png') }}"></img>
+    <br>
+    <br>
+    <h3>Just a simple app for your variant clinical annotation</h3>
+    <br>
+    <h2><a style="font-weight: bold; color: red; font-size: 110%;" href="{{ url_for('auth.register') }}">Register</a> and follow the <a style="font-weight: bold; color: red; font-size: 110%;" href="{{ url_for('main.installation') }}">Instructions</a>!</h2>
+    <br>
+    <h3 style="color: grey;">For the bravest: collaborate with Diagnosticator <a style="font-weight: bold; color: #d3d3d3; font-size: 110%;" href="{{ url_for('main.development_installation') }}">Development</a>
+      <br> we look forward to having you abroad!</h3>
+  </div>
+</body>
+
+<script>
+  window.onload = function(){
+      document.getElementById('close').onclick = function(){
+          this.parentNode.parentNode
+          .removeChild(this.parentNode);
+          return false;
+      };
+  };
+</script>
+
+{% endblock %}

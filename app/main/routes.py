@@ -21,7 +21,7 @@ def before_request():
 @bp.route('/')
 @bp.route('/index')
 def index():
-    return( render_template( 'index_DXcator.html' ) )
+    return( render_template( 'index_mailSES_DXcator.html' ) )
 
 ########################################################
 ################      DOCUMENTATION      ###############
