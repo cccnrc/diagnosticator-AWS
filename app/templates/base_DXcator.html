@@ -5,6 +5,14 @@
 {% endblock %}
 
 {% block head %}
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JGP91S5CE5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-JGP91S5CE5');
+  </script>
 {{ super() }}
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
   <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
