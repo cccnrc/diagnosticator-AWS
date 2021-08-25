@@ -2,14 +2,12 @@ version: '3'
 
 services:
   docker-DX-VEP:
-    image: cccnrc/diagnosticator-vep:0.1
-    # image: alpine-vep:0.0
+    image: cccnrc/diagnosticator-vep
     container_name: docker-DX-VEP
     volumes:
       - DX-UPLOAD:/home/VEP_INPUT
   docker-DX-ASILO:
-    image: cccnrc/diagnosticator-asilo:0.2
-    # image: asilo:0.0
+    image: cccnrc/diagnosticator-asilo
     container_name: docker-DX-ASILO
     volumes:
       - DX-UPLOAD:/INPUT
@@ -19,16 +17,14 @@ services:
     ports:
       - "6380:6379"
   docker-diagnosticator:
-    # build: .
-    image: cccnrc/diagnosticator:0.11
+    image: cccnrc/diagnosticator
     container_name: diagnosticator
     links:
       - docker-redis
     environment:
       - REDIS_URL=redis://docker-redis:6379
-      # - DEVELOPMENT_TESTING=1
       - UPLOAD_FOLDER=/home/diagnosticator/upload
-      - SERVER_ADDRESS=https://diagnosticator-server-00.herokuapp.com
+      - SERVER_ADDRESS=https://diagnosticator.com
     ports:
       - "9000:5000"
     expose:
@@ -38,8 +34,7 @@ services:
       - DX-UPLOAD:/home/diagnosticator/upload
       - DX-DB:/home/diagnosticator/DB
   docker-rq-worker:
-    # build: .
-    image: cccnrc/diagnosticator:0.11
+    image: cccnrc/diagnosticator
     container_name: rq-worker
     links:
       - docker-redis
