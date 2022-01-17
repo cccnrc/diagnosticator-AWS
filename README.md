@@ -97,6 +97,7 @@ sudo chown -R :www-data  /home/ec2-user/diagnosticator-server-AWS/diagnosticator
 
 
 ### APP UPDATES
+APP_DIR="/home/ec2-user/diagnosticator-server-AWS/diagnosticator-AWS"   # put yours DIR here
 cd $APP_DIR
 git pull
 sudo systemctl daemon-reload
