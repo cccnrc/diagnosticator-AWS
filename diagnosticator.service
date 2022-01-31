@@ -1,0 +1,31 @@
+[Unit]
+Description=Diagnosticator Server Application
+After=network.target
+
+[Service]
+User=<your-username>
+Group=www-data
+WorkingDirectory=<your-APP_DIR>
+Environment=FLASK_CONFIG=production
+Environment=AWS_ACCESS_KEY_ID=<your-AWS-KEY_ID>
+Environment=AWS_SECRET_ACCESS_KEY=<your-AWS-SECRET_KEY>
+Environment=AWS_SESSION_TOKEN=<your-AWS-SESSION_TOKEN>
+Environment=SES_REGION_NAME=<your-AWS-REGION>
+Environment=SES_EMAIL_SOURCE=<your-MAIL-SOURCE>
+Environment=MAIL_SERVER=<your-MAIL_SERVER>
+Environment=MAIL_PORT=<your-MAIL_PORT>
+Environment=MAIL_USERNAME=<your-MAIL_USERNAME>
+Environment=MAIL_PASSWORD=<your-MAIL_PASSWORD>
+Environment=MAIL_USE_TLS=1
+Environment=MAIL_USE_SSL=0
+Environment=TOKEN_RESTORE_EXP_SEC=3600
+Environment=TOKEN_EXP_SEC=3600
+Environment=VARIANT_DB=SQL
+Environment=CREDENTIALS_URL=<your-AWS_SMTP_CREDENTIALS_URL>
+Environment=DATABASE_URL=mysql+pymysql://diagnosticator:diagnosticator@localhost:3306/diagnosticator
+
+ExecStart=<your-APP_DIR>/venv/bin/gunicorn -c <your-APP_DIR>/gunicorn_conf.py -w 4 main:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
