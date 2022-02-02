@@ -1,0 +1,98 @@
+{% extends "base_DXcator.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+
+<style>
+  div.ticket-container {
+    font-size: 150%;
+  }
+  .value {
+    font-weight: normal;
+    font-family: monospace;
+    font-size: 80%;
+  }
+  stream.key {
+    font-weight: bold;
+  }
+  #larger {
+    font-size: 100%;
+    font-family: monospace;
+  }
+  div.ticket-group {
+    overflow-wrap: break-word;
+  }
+</style>
+
+  <div class="ticket-container" style="margin-top: 5%;">
+
+    <stream class="key">Author:</stream> <stream class="value">
+      <a href="{{ url_for('ticket.user', username = ticket.author.username ) }}">
+        {{ ticket.author.username }}
+      </a>
+    </stream>
+    <br>
+    <br>
+    <div class="ticket-group">
+      <stream class="key">ID:</stream>
+      <stream class="value">{{ ticket.id }}</stream>
+    </div>
+    <br>
+    <div class="ticket-group">
+      <stream class="key">Urgency:</stream>
+      <stream class="value">{{ urgency_choices[ticket.urgency|string] }}</stream>
+    </div>
+    <br>
+    <div class="ticket-group">
+      <stream class="key">Application:</stream>
+      <stream class="value">{{ ticket_app[ticket.application|string] }}</stream>
+    </div>
+    <br>
+    <div class="ticket-group">
+      <stream class="key">Argument:</stream>
+      <stream class="value">{{ ticket_arg[ticket.argument|string] }}</stream>
+    </div>
+    <br>
+    <div class="ticket-group">
+      <stream class="key">Body:</stream>
+      <br>
+      <div class="ticket_reply-group" style="border: 1px solid #bababa;">
+        <stream class="value" style="font-weight: bold;">{{ ticket.author.username }}, {{ticket.timestamp.strftime("%m-%d-%Y (%H:%M)")}}</stream><stream class="value">: {{ ticket.body }}</stream>
+      </div>
+      {% for ticket_reply in ticket_replies %}
+        {% if (loop.index % 2) == 0: %}
+          <div class="ticket_reply-group" style="margin-left: {{loop.index}}%; border: 1px solid #bababa; margin-top: 0.5%;">
+          {% else %}
+            <div class="ticket_reply-group" style="margin-left: {{loop.index}}%; border: 1px solid #dedede; margin-top: 0.5%;">
+        {% endif %}
+          <stream class="value" style="font-weight: bold;">{{ ticket_reply.replier.username }}, {{ticket_reply.timestamp.strftime("%m-%d-%Y (%H:%M)") }}:</stream>
+          <stream class="value">{{ ticket_reply.body }}</stream>
+        </div>
+      {% endfor %}
+    </div>
+
+    <br>
+    <div class="row">
+        <div class="col-md-4">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+
+
+    <br>
+    <br>
+    <div class="ticket-group">
+      <stream class="key">Followed By:</stream>
+      {% for single_user in ticket.ticket_followers %}
+        <br>
+        <stream class="value" style="margin-left: 2%;">-
+          <a href="{{ url_for('ticket.user', username = single_user.username ) }}">
+            {{ single_user.username }}
+          </a>
+        </stream>
+      {% endfor %}
+    </div>
+
+  </div>
+
+{% endblock %}

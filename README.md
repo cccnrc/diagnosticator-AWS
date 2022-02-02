@@ -146,6 +146,18 @@ git pull
 sudo systemctl restart diagnosticator
 ```
 
+If you made changes to the databse, be sure to apply them on your server database as well. In this case:
+```
+cd $APP_DIR
+git pull
+flask db migrate -m "database changed"
+flask db upgrade
+sudo systemctl restart diagnosticator
+```
+in case something goes wrong:
+```
+flask db downgrade
+```
 ---
 
 ## Development

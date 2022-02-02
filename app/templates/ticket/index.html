@@ -1,0 +1,12 @@
+{% extends "base_DXcator.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+
+
+  This is the index page for Diagnosticator Ticket System
+  <a href="{{ url_for('ticket.user', username=current_user.username) }}">Your Tickets</a>
+  <br>
+  <a href="{{ url_for('ticket.all') }}">All Tickets</a>
+
+{% endblock %}

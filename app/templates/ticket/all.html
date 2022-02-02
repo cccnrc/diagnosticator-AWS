@@ -1,0 +1,99 @@
+{% extends "base_DXcator.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+
+<style>
+  div.ticket-container {
+    font-size: 150%;
+  }
+  .value {
+    font-weight: normal;
+    font-family: monospace;
+    font-size: 80%;
+  }
+  stream.key {
+    font-weight: bold;
+  }
+  #larger {
+    font-size: 100%;
+    font-family: monospace;
+  }
+  th {
+    text-align: center;
+    background-color: #dedede;
+  }
+  td {
+    font-size: 75%;
+    font-family: monospace;
+  }
+</style>
+
+
+  <div style="text-align: center; margin-top: 2%;">
+    <a href="{{ url_for('ticket.submit')}}">
+    <button class="btn btn-info">Submit your ticket</button>
+    </a>
+  </div>
+
+  <div class="ticket-container" style="margin-top: 2%;">
+  <hr>
+  <h3>Tickets:</h3>
+
+    <table class="table table-hover" style="text-align: center;">
+
+      <thead>
+        <tr>
+          <th>
+            author
+          </th>
+          <th>
+            ID
+          </th>
+          <th>
+            application
+          </th>
+          <th>
+            topic
+          </th>
+          <th>
+            created on
+          </th>
+          <th>
+            last update
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for ticket in tickets %}
+        <tr>
+          <td>
+            <a href="{{ url_for( 'ticket.user', username = ticket.author.username ) }}">
+              {{ ticket.author.username }}
+            </a>
+          <td>
+            <a href="{{ url_for( 'ticket.ticket_reply', ticket_ID = ticket.id ) }}" target="_blank">
+              {{ ticket.id }}
+            </a>
+          </td>
+          <td>
+            {{ ticket_app[ticket.application|string] }}
+          </td>
+          <td>
+            {{ ticket_arg[ticket.argument|string] }}
+          </td>
+          <td>
+            {{ ticket.timestamp.strftime("%m-%d-%Y (%H:%M)") }}
+          </td>
+          <td>
+            {{ ticket.last_modify.strftime("%m-%d-%Y (%H:%M)") }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+
+{% endblock %}

@@ -21,6 +21,14 @@ NUMBERS = string.digits
 PUNCTUATION = string.punctuation
 
 
+# act as auxiliary table for User and Ticket table
+user_tickets = db.Table(
+    "user_tickets",
+    db.Column("user_id", db.Integer, db.ForeignKey("user.id")),
+    db.Column("ticket_id", db.Integer, db.ForeignKey("ticket.id")),
+)
+
+
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
@@ -43,6 +51,9 @@ class User(UserMixin, db.Model):
     last_knownHG38_request = db.Column(db.DateTime)
     last_knownHG38_request_project_name = db.Column(db.String(120))
     last_message_read_time = db.Column(db.DateTime)
+    tickets = db.relationship('Ticket', backref='author', lazy='dynamic')
+    ticket_replies = db.relationship('TicketReply', backref='replier', lazy='dynamic')
+    tickets_followed = db.relationship("Ticket", secondary=user_tickets, back_populates="ticket_followers")
     messages_received = db.relationship('Message',
                                         foreign_keys='Message.recipient_id',
                                         backref='recipient', lazy='dynamic')
@@ -206,6 +217,34 @@ class Message(db.Model):
 
 
 
+
+
+class Ticket(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(4000))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    last_modify = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    urgency = db.Column(db.Integer, index=True)
+    application = db.Column(db.Integer, index=True)
+    argument = db.Column(db.Integer, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    ticket_replies = db.relationship('TicketReply', backref='original', lazy='dynamic')
+    ticket_followers = db.relationship('User', secondary=user_tickets, back_populates="tickets_followed")
+
+    def __repr__(self):
+        return '<Ticket {}>'.format(self.body)
+
+
+
+class TicketReply(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(4000))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    original_id = db.Column(db.Integer, db.ForeignKey('ticket.id'))
+
+    def __repr__(self):
+        return '<Ticket Reply {}>'.format(self.body)
 
 
 
