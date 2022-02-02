@@ -1,8 +1,7 @@
 Dear {{ user.username }},
 
 There is an update in one of the tickets you are following:
-{{ url_for('ticket.ticket_reply', ticket_ID = ticket.original.id, _external=True) }}
-
+{{ ticket.original.title }}
 
 Here is the message:
 ----------------------------------------------------------------

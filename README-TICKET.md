@@ -87,20 +87,3 @@ for single_user in ticket.ticket_followers:
           send_ticket_email(single_user, ticket_reply)
 # ... #
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### ENDc

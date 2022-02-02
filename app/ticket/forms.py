@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField, RadioField, TextAreaField, SelectField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 
 ticket_app = ([
     ( '1', 'Server' ),
@@ -24,7 +24,8 @@ urgency_choices = ([
     ])
 
 class TicketForm(FlaskForm):
-    body = TextAreaField('Body', validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired(), Length(min=1, max=250)])
+    body = TextAreaField('Body', validators=[DataRequired(), Length(min=1, max=4000)])
     urgency = RadioField('Urgency', choices=urgency_choices, validators=[DataRequired()] )
     application = RadioField('Application', choices=ticket_app, validators=[DataRequired()])
     argument = SelectField('Argument', choices=ticket_arg, validators=[DataRequired()])

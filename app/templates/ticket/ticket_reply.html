@@ -34,8 +34,11 @@
     <br>
     <br>
     <div class="ticket-group">
-      <stream class="key">ID:</stream>
-      <stream class="value">{{ ticket.id }}</stream>
+      <stream class="key">Title: </stream><stream class="value">
+        <a href="{{ url_for('ticket.ticket_reply', ticket_ID = ticket.id ) }}">
+          {{ ticket.title }}
+        </a>
+      </stream>
     </div>
     <br>
     <div class="ticket-group">

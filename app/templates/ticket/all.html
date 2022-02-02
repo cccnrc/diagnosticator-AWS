@@ -48,7 +48,7 @@
             author
           </th>
           <th>
-            ID
+            title
           </th>
           <th>
             application
@@ -72,9 +72,10 @@
             <a href="{{ url_for( 'ticket.user', username = ticket.author.username ) }}">
               {{ ticket.author.username }}
             </a>
+          </td>
           <td>
             <a href="{{ url_for( 'ticket.ticket_reply', ticket_ID = ticket.id ) }}" target="_blank">
-              {{ ticket.id }}
+              {{ ticket.title }}
             </a>
           </td>
           <td>

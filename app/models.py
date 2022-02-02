@@ -221,6 +221,7 @@ class Message(db.Model):
 
 class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(250))
     body = db.Column(db.String(4000))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     last_modify = db.Column(db.DateTime, index=True, default=datetime.utcnow)

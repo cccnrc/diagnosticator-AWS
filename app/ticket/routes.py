@@ -54,13 +54,13 @@ def submit():
             urgency = form.urgency.data,
             application = form.application.data,
             argument = form.argument.data,
+            title = form.title.data,
             body = form.body.data
         )
         db.session.add(ticket)
         db.session.commit()
         flash('Ticket submitted!', 'success')
         return( redirect( url_for('ticket.ticket_reply', ticket_ID = ticket.id )))
-
     return( render_template( 'ticket/ticket_submit.html', form=form ))
 
 

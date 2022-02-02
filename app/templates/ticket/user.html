@@ -19,6 +19,7 @@
   td {
     font-size: 90%;
     font-family: monospace;
+    max-width: 20%;
   }
 </style>
 
@@ -41,7 +42,7 @@
           author
         </th>
         <th>
-          ID
+          title
         </th>
         <th>
           application
@@ -67,7 +68,7 @@
           </a>
         <td>
           <a href="{{ url_for( 'ticket.ticket_reply', ticket_ID = ticket.id ) }}" target="_blank">
-            {{ ticket.id }}
+            {{ ticket.title }}
           </a>
         </td>
         <td>
@@ -99,7 +100,7 @@
           author
         </th>
         <th>
-          ID
+          title
         </th>
         <th>
           application
@@ -125,7 +126,7 @@
           </a>
         <td>
           <a href="{{ url_for( 'ticket.ticket_reply', ticket_ID = ticket.id ) }}" target="_blank">
-            {{ ticket.id }}
+            {{ ticket.title }}
           </a>
         </td>
         <td>
@@ -159,7 +160,7 @@
           author
         </th>
         <th>
-          ID
+          title
         </th>
         <th>
           application
@@ -182,7 +183,7 @@
           </a>
         <td>
           <a href="{{ url_for( 'ticket.ticket_reply', ticket_ID = ticket.original.id ) }}" target="_blank">
-            {{ ticket.original.id }}
+            {{ ticket.original.title }}
           </a>
         </td>
         <td>

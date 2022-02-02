@@ -56,6 +56,17 @@
       </div>
       <br>
       <br>
+
+      {% for error in form.title.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+      <div class="form-group">
+        {{ form.title.label }}<stream style="font-size: 80%;"> (max 250 chars)</stream>: {{ form.title(class="value") }}
+      </div>
+      <br>
+      <br>
+
+
       <div class="form-group">
         {{ form.body.label }}:
         <br>
