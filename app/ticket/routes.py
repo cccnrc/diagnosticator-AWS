@@ -84,6 +84,7 @@ def ticket_reply(ticket_ID):
                 )
             ticket.last_modify = datetime.utcnow()
             ticket.ticket_followers.append(user)
+            send_ticket_email(ticket.author, ticket_reply)
             for single_user in ticket.ticket_followers:
                 send_ticket_email(single_user, ticket_reply)
             db.session.add(ticket_reply)
