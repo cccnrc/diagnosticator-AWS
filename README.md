@@ -146,7 +146,7 @@ git pull
 sudo systemctl restart diagnosticator
 ```
 
-If you made changes to the databse, be sure to apply them on your server database as well. In this case:
+If you made changes to the database, be sure to apply them on your server database as well. In this case:
 ```
 cd $APP_DIR
 git pull
