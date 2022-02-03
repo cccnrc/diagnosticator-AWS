@@ -99,3 +99,21 @@ def ticket_reply(ticket_ID):
                         urgency_choices = dict(urgency_choices),
                         form = form
                         ))
+
+@bp.route('/close/<ticket_ID>')
+@login_required
+def close(ticket_ID):
+    ticket = Ticket.query.filter_by(id=ticket_ID).first_or_404()
+    ticket.closed = True
+    ticket.closed_on = datetime.utcnow()
+    db.session.commit()
+    return( redirect( url_for('ticket.ticket_reply', ticket_ID = ticket.id )))
+
+@bp.route('/reopen/<ticket_ID>')
+@login_required
+def reopen(ticket_ID):
+    ticket = Ticket.query.filter_by(id=ticket_ID).first_or_404()
+    ticket.closed = False
+    ticket.last_modify = datetime.utcnow()
+    db.session.commit()
+    return( redirect( url_for('ticket.ticket_reply', ticket_ID = ticket.id )))

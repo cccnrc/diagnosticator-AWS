@@ -22,9 +22,24 @@
   div.ticket-group {
     overflow-wrap: break-word;
   }
+  stream#open {
+    color: green;
+  }
+  stream#closed {
+    color: red;
+    font-weight: bold;
+  }
+  .closed {
+    background-color: rgba(255, 0, 0, 0.2);;
+  }
 </style>
 
-  <div class="ticket-container" style="margin-top: 5%;">
+  {% set STATUS = 'open' %}
+  {% if ticket.closed %}
+    {% set STATUS = 'closed' %}
+  {% endif %}
+
+  <div class="ticket-container {{STATUS}}" style="margin-top: 5%;">
 
     <stream class="key">Author:</stream> <stream class="value">
       <a href="{{ url_for('ticket.user', username = ticket.author.username ) }}">
@@ -33,6 +48,26 @@
     </stream>
     <br>
     <br>
+
+    <div class="ticket-group">
+      <stream class="key">Status: </stream>
+      <stream class="value" id="{{ STATUS }}">
+        {{ STATUS }}
+      </stream>
+      {% if current_user == ticket.author or current_user.admin %}
+        {% if not ticket.closed %}
+          <a href="{{ url_for('ticket.close', ticket_ID = ticket.id ) }}">
+            <button class="btn btn-danger" style="margin-left: 60%;">Close Ticket</button>
+          </a>
+        {% else %}
+          <a href="{{ url_for('ticket.reopen', ticket_ID = ticket.id ) }}">
+            <button class="btn btn-success" style="margin-left: 60%;">Reopen Ticket</button>
+          </a>
+        {% endif %}
+      {% endif %}
+    </div>
+    <br>
+
     <div class="ticket-group">
       <stream class="key">Title: </stream><stream class="value">
         <a href="{{ url_for('ticket.ticket_reply', ticket_ID = ticket.id ) }}">
@@ -74,27 +109,30 @@
       {% endfor %}
     </div>
 
-    <br>
-    <div class="row">
-        <div class="col-md-4">
-            {{ wtf.quick_form(form) }}
-        </div>
-    </div>
+    {% if not ticket.closed %}
 
+      <br>
+      <div class="row">
+          <div class="col-md-4">
+              {{ wtf.quick_form(form) }}
+          </div>
+      </div>
 
-    <br>
-    <br>
-    <div class="ticket-group">
-      <stream class="key">Followed By:</stream>
-      {% for single_user in ticket.ticket_followers %}
-        <br>
-        <stream class="value" style="margin-left: 2%;">-
-          <a href="{{ url_for('ticket.user', username = single_user.username ) }}">
-            {{ single_user.username }}
-          </a>
-        </stream>
-      {% endfor %}
-    </div>
+      <br>
+      <br>
+      <div class="ticket-group">
+        <stream class="key">Followed By:</stream>
+        {% for single_user in ticket.ticket_followers %}
+          <br>
+          <stream class="value" style="margin-left: 2%;">-
+            <a href="{{ url_for('ticket.user', username = single_user.username ) }}">
+              {{ single_user.username }}
+            </a>
+          </stream>
+        {% endfor %}
+      </div>
+
+    {% endif %}
 
   </div>
 

@@ -51,6 +51,7 @@ class User(UserMixin, db.Model):
     last_knownHG38_request = db.Column(db.DateTime)
     last_knownHG38_request_project_name = db.Column(db.String(120))
     last_message_read_time = db.Column(db.DateTime)
+    admin = db.Column(db.Boolean, default=False)
     tickets = db.relationship('Ticket', backref='author', lazy='dynamic')
     ticket_replies = db.relationship('TicketReply', backref='replier', lazy='dynamic')
     tickets_followed = db.relationship("Ticket", secondary=user_tickets, back_populates="ticket_followers")
@@ -229,6 +230,8 @@ class Ticket(db.Model):
     application = db.Column(db.Integer, index=True)
     argument = db.Column(db.Integer, index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    closed = db.Column(db.Boolean, default=False)
+    closed_on = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     ticket_replies = db.relationship('TicketReply', backref='original', lazy='dynamic')
     ticket_followers = db.relationship('User', secondary=user_tickets, back_populates="tickets_followed")
 

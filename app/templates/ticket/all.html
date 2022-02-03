@@ -22,12 +22,28 @@
   th {
     text-align: center;
     background-color: #dedede;
+    vertical-align: middle;
   }
   td {
     font-size: 75%;
     font-family: monospace;
     max-width: 20%;
     overflow-wrap: break-word;
+    vertical-align: middle;
+  }
+  table {
+    table-layout:fixed;
+    width:100%;
+  }
+  .closed {
+    background-color: rgba(255, 0, 0, 0.15);;
+  }
+  stream#open {
+    color: green;
+  }
+  stream#closed {
+    color: red;
+    font-weight: bold;
   }
 </style>
 
@@ -59,6 +75,9 @@
             topic
           </th>
           <th>
+            status
+          </th>
+          <th>
             created on
           </th>
           <th>
@@ -69,27 +88,38 @@
 
       <tbody>
         {% for ticket in tickets %}
+
+        {% set STATUS = 'open' %}
+        {% if ticket.closed %}
+          {% set STATUS = 'closed' %}
+        {% endif %}
+
         <tr>
-          <td>
+          <td class="{{ STATUS }}">
             <a href="{{ url_for( 'ticket.user', username = ticket.author.username ) }}">
               {{ ticket.author.username }}
             </a>
           </td>
-          <td>
+          <td class="{{ STATUS }}">
             <a href="{{ url_for( 'ticket.ticket_reply', ticket_ID = ticket.id ) }}" target="_blank">
               {{ ticket.title }}
             </a>
           </td>
-          <td>
+          <td class="{{ STATUS }}">
             {{ ticket_app[ticket.application|string] }}
           </td>
-          <td>
+          <td class="{{ STATUS }}">
             {{ ticket_arg[ticket.argument|string] }}
           </td>
-          <td>
+          <td class="{{ STATUS }}">
+            <stream id="{{ STATUS }}">
+              {{ STATUS }}
+            </stream>
+          </td>
+          <td class="{{ STATUS }}">
             {{ ticket.timestamp.strftime("%m-%d-%Y (%H:%M)") }}
           </td>
-          <td>
+          <td class="{{ STATUS }}">
             {{ ticket.last_modify.strftime("%m-%d-%Y (%H:%M)") }}
           </td>
         </tr>

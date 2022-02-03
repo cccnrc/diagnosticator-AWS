@@ -33,5 +33,5 @@ class TicketForm(FlaskForm):
 
 class TicketReplyForm(FlaskForm):
     body = TextAreaField('Update')
-    follow = BooleanField('Follow Ticket Updates')
+    follow = BooleanField('Follow Ticket Updates (e-mail)')
     submit = SubmitField('Update')
