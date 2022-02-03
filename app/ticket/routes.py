@@ -9,7 +9,7 @@ import os
 from app.models import User, Ticket, TicketReply
 from app.ticket.forms import TicketForm, TicketReplyForm
 from app.ticket.forms import ticket_app, ticket_arg, urgency_choices
-from app.ticket.email import send_ticket_email
+from app.ticket.email import send_ticket_email, send_ticket_closure_email, send_ticket_reopen_email
 
 @bp.route('/index')
 @login_required
@@ -106,6 +106,9 @@ def close(ticket_ID):
     ticket = Ticket.query.filter_by(id=ticket_ID).first_or_404()
     ticket.closed = True
     ticket.closed_on = datetime.utcnow()
+    send_ticket_closure_email(ticket.author, ticket)
+    for single_user in ticket.ticket_followers:
+        send_ticket_closure_email(single_user, ticket)
     db.session.commit()
     return( redirect( url_for('ticket.ticket_reply', ticket_ID = ticket.id )))
 
@@ -115,5 +118,8 @@ def reopen(ticket_ID):
     ticket = Ticket.query.filter_by(id=ticket_ID).first_or_404()
     ticket.closed = False
     ticket.last_modify = datetime.utcnow()
+    send_ticket_reopen_email(ticket.author, ticket)
+    for single_user in ticket.ticket_followers:
+        send_ticket_reopen_email(single_user, ticket)
     db.session.commit()
     return( redirect( url_for('ticket.ticket_reply', ticket_ID = ticket.id )))

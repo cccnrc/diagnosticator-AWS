@@ -60,6 +60,9 @@
             <button class="btn btn-danger" style="margin-left: 60%;">Close Ticket</button>
           </a>
         {% else %}
+          <stream class="value" style="font-size: 60%;">
+            {{ ticket.closed_on.strftime("%m-%d-%Y (%H:%M)") }}
+          </stream>
           <a href="{{ url_for('ticket.reopen', ticket_ID = ticket.id ) }}">
             <button class="btn btn-success" style="margin-left: 60%;">Reopen Ticket</button>
           </a>

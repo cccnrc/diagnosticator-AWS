@@ -87,3 +87,9 @@ for single_user in ticket.ticket_followers:
           send_ticket_email(single_user, ticket_reply)
 # ... #
 ```
+
+12. set user as admin:
+```
+UPDATE diagnosticator.user SET admin=1 WHERE username="enrico0";
+SELECT username,email,created_on,confirmed,confirmed_on,admin FROM diagnosticator.user;
+```
