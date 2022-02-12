@@ -16,6 +16,8 @@ services:
     container_name: redis
     ports:
       - "6380:6379"
+    volumes:
+      - DX-REDIS:/data
   docker-diagnosticator:
     image: cccnrc/diagnosticator
     container_name: diagnosticator
@@ -50,3 +52,4 @@ services:
 volumes:
   DX-UPLOAD:
   DX-DB:
+  DX-REDIS:
