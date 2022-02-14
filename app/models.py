@@ -40,6 +40,8 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
+    long_token = db.Column(db.String(32), index=True, unique=True)
+    long_token_expiration = db.Column(db.DateTime)
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
     variantHG19_users = db.relationship('VariantHG19User', backref='user', foreign_keys='VariantHG19User.user_id', lazy='dynamic')
@@ -118,6 +120,19 @@ class User(UserMixin, db.Model):
     def revoke_token(self):
         self.token_expiration = datetime.utcnow() - timedelta(seconds=1)
 
+    ### this is for store with local installation
+    def get_long_token(self, expires_in=2592000):
+        now = datetime.utcnow()
+        if self.long_token and self.long_token_expiration > now + timedelta(seconds=60):
+            return self.long_token
+        self.long_token = base64.b64encode(os.urandom(24)).decode('utf-8')
+        self.long_token_expiration = now + timedelta(seconds=expires_in)
+        db.session.add(self)
+        return self.long_token
+
+    def revoke_long_token(self):
+        self.long_token_expiration = datetime.utcnow() - timedelta(seconds=1)
+
     @staticmethod
     def check_token(token):
         user = User.query.filter_by(token=token).first()
@@ -125,6 +140,12 @@ class User(UserMixin, db.Model):
             return None
         return user
 
+    @staticmethod
+    def check_long_token(token):
+        user = User.query.filter_by(long_token=token).first()
+        if user is None or user.long_token_expiration < datetime.utcnow():
+            return None
+        return user
 
     def to_dict(self):
         data = {

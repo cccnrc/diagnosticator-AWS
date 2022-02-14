@@ -20,7 +20,8 @@ def basic_auth_error(status):
 
 @token_auth.verify_token
 def verify_token(token):
-    return User.check_token(token) if token else None
+    if token:
+        return User.check_token(token) or User.check_long_token(token) or None
 
 
 @token_auth.error_handler
